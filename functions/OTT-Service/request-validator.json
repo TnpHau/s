@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "input validator body internal transfer",
+  "required": [
+    "data",
+    "requestTime",
+    "requestId"
+  ]
+}

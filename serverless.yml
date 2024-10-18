@@ -1,0 +1,57 @@
+service: PARTNER-OTT-API
+frameworkVersion: "4"
+custom:
+  apiGatewayKey:
+    dev: dev
+    uat: uat
+    pro: pro
+  serverless-offline:
+    port: 3000
+    host: localhost
+    stage: dev
+  vpc:
+    dev:
+      securityGroupIds:
+        - sg-0eb0c125fc4b48662
+      subnetIds:
+        - subnet-0c35dc3665b940db9
+        - subnet-000b6c83af72ac6ab
+    uat:
+      securityGroupIds:
+        - sg-0dce94d650f3e2aff
+      subnetIds:
+        - subnet-05573d86c0a4be194
+    pro:
+      securityGroupIds:
+        - sg-0779edfde203f2683
+      subnetIds:
+        - subnet-056ef64759e59eb64
+        - subnet-069f030a7f7f93078
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-southeast-1
+  deploymentBucket:
+    name: partner-ott-api
+  logs:
+    restApi:
+      roleManagedExternally: true
+      accessLogging: true
+      fullExecutionData: true
+      executionLogging: true
+  vpc: ${self:custom.vpc.${opt:stage, sls:stage}}
+
+package:
+  individually: true
+  excludeDevDependencies: false
+  patterns:
+    - "!./**"
+    - ./functions/**/*.py
+    - ./functions/**/*.js
+
+functions:
+  - ${file(functions/OTT-Service/OTT-Service.yml)}
+
+plugins:
+  - serverless-offline

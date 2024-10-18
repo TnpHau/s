@@ -1,0 +1,31 @@
+OTT-Service:
+  handler: functions/OTT-Service/index.handler
+  runtime: nodejs18.x
+  timeout: 30
+  memorySize: 256
+  description: api /partnerott/api/v1/registerTransaction
+
+  events:
+    - http:
+        path: /partnerott/api/v1/registerTransaction
+        integration: lambda
+        method: post
+        request:
+          passThrough: WHEN_NO_TEMPLATES
+          template:
+            application/json: ${file(functions/OTT-Service/request-mapping.yml)}
+            application/x-www-form-urlencoded: null
+          parameters:
+            headers:
+              X-IBM-CLIENT-SECRET:
+                required: true
+          # schemas:
+            # application/json: ${file(functions/OTT-Service/request-validator.json)}
+        response:
+          headers:
+            Content-Type: "'application/json'"
+          statusCodes:
+            200:
+              pattern: ''
+          template: ${file(functions/OTT-Service/response-mapping.yml)}
+  environment: '${file(envs/OTT-Service/${opt:stage, sls:stage}.json)}'

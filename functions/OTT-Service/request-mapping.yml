@@ -1,0 +1,43 @@
+|
+#set($inputRoot = $input.path('$'))
+{
+   "reqServer":{
+      "host":"10.0.65.114",
+      "port":7800,
+      "path":"/partnerService/v1/pushOTTGJoy",
+      "timeout":30,
+      "method":"POST"
+   },
+   "reqHeaders":{
+      "Content-Type":"application/json"
+   },
+   "reqBody":{
+      "pushOTTGJoyReq": {
+         "header": {
+            "common": {
+               "serviceVersion":"1",
+               "messageId":"$inputRoot.requestId",
+               "transactionId":"$inputRoot.requestId",
+               "messageTimestamp":"{timeESB}"
+            },
+            "client": {
+               "sourceAppID": "API",
+               "userDetail": {
+                  "userID": "API",
+                  "userPassword": "RVNCVUFUQDIwMjQ="
+               }
+            }
+         },
+         "bodyReq": {
+            "functionCode": "PARTNERSERVICE-PUSHOTTGJOY-JDBC-ECRM",						
+            "gjId": "$inputRoot.data.partnerUserId",
+            "ottContent" :"$inputRoot.data.ottContent",
+            "priority" :"$inputRoot.data.priority",
+            "account":"$inputRoot.data.account",
+            "msgType" :"$inputRoot.data.msgType",
+            "ottTitle" :"$inputRoot.data.ottTitle"
+         }
+      }
+   },
+   "originalRequest": $input.json('$')
+}

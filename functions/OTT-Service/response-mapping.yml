@@ -1,0 +1,24 @@
+|
+#set($inputRoot = $input.path('$.body.pushOTTGJoyRes'))
+{
+#if($inputRoot.responseStatus.status.toString() == "")
+    "resultCode" : "99",
+    "resultMessage" : "Error",
+#end
+#if($inputRoot.responseStatus.status.toString() == "0")
+    "responseId" : "$inputRoot.header.common.messageId",
+    "resultCode" : "00",
+    "resultMessage" : "Success",
+    "responseTime" : "$inputRoot.header.common.messageTimestamp",
+#end
+#if($inputRoot.responseStatus.status.toString() =="1")
+    "responseId" : "$inputRoot.header.common.messageId",
+    "resultCode" : "$inputRoot.responseStatus.errorInfo[0].errorCode",
+    "resultMessage" : "$inputRoot.responseStatus.errorInfo[0].errorDesc",
+    "responseTime" : "$inputRoot.header.common.messageTimestamp",
+#end
+  "data" : {
+    "resultCode" : "$inputRoot.bodyRes.resultCode",
+    "resultMessage" : "$inputRoot.bodyRes.resultMessage"
+  }
+}
